@@ -13,6 +13,28 @@ import hardhatTypechain from "@nomicfoundation/hardhat-typechain";
 
 import type { HardhatUserConfig } from "hardhat/config";
 
+const networks: NonNullable<HardhatUserConfig["networks"]> = {
+  hardhat: {
+    type: "edr-simulated", // <-- for the built-in Hardhat network
+    chainId: 31337,
+    initialBaseFeePerGas: 0,
+  },
+  localhost: {
+    type: "http", // for a local node via RPC
+    url: process.env.LOCAL_RPC_URL ?? "http://127.0.0.1:8545",
+    chainId: 31337,
+  },
+};
+
+if (process.env.SEPOLIA_RPC_URL) {
+  networks.sepolia = {
+    type: "http",
+    url: process.env.SEPOLIA_RPC_URL,
+    chainId: 11155111,
+    accounts: process.env.DEPLOYER_KEY ? [process.env.DEPLOYER_KEY] : [],
+  };
+}
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.28",
@@ -24,26 +46,7 @@ const config: HardhatUserConfig = {
         },
       },
     },
-
-  networks: {
-    hardhat: {
-      type: "edr-simulated", // <-- for the built-in Hardhat network
-      chainId: 31337,
-      initialBaseFeePerGas: 0,
-    },
-    localhost: {
-      type: "http",          // for a local node via RPC
-      url: process.env.LOCAL_RPC_URL ?? "http://127.0.0.1:8545",
-      chainId: 31337,
-    }
-    ,
-    sepolia: {
-      type: "http",
-      url: process.env.SEPOLIA_RPC_URL ?? "",
-      chainId: 11155111,
-      accounts: process.env.DEPLOYER_KEY ? [process.env.DEPLOYER_KEY] : [],
-    },
-  },
+  networks,
  
   plugins: [
     hardhatEthers,
