@@ -8,7 +8,7 @@
 
 ![LOGO](./docs/tenji-turttle.png)
 
-#                                   TenjiCoin Core
+#                                  TenjiCoin Core
 
 TenjiCoin is a meme token built around a simple idea: the market moves too fast for most people.
 
